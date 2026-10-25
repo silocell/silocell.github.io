@@ -1,989 +1,257 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Homework Launchpad</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
-<style>
-/* ============================================================
-   LAYOUT: a squared-exercise-book sheet. Faint grid ground,
-   one red margin rule, cards sitting on the page like
-   stuck-in worksheets. Everything derives from the tokens below.
-   ============================================================ */
-:root{
-  --paper:#f7f6f2;
-  --card:#ffffff;
-  --ink:#1a1f2b;
-  --ink-soft:#5b6476;
-  --ink-faint:#8d95a5;
-  --rule:#d9dce4;
-  --grid:rgba(26,31,43,.045);
-  --accent:#1f4fd8;        /* biro blue */
-  --accent-soft:#e7edfd;
-  --margin:#d2403c;        /* the red margin line */
-  --good:#1d7a4c;
-  --shadow:0 1px 2px rgba(26,31,43,.06),0 8px 24px -12px rgba(26,31,43,.18);
-  --radius:14px;
-  --font-display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
-  --font-body:"Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  --font-mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,monospace;
-  color-scheme:light;
-}
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --paper:#11141b;
-    --card:#191d26;
-    --ink:#eceef3;
-    --ink-soft:#a3abbb;
-    --ink-faint:#737d90;
-    --rule:#2b3140;
-    --grid:rgba(236,238,243,.04);
-    --accent:#7aa0ff;
-    --accent-soft:#1d2740;
-    --margin:#e0605c;
-    --good:#4fc08a;
-    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6);
-    color-scheme:dark;
-  }
-}
-:root[data-theme="dark"]{
-  --paper:#11141b;
-  --card:#191d26;
-  --ink:#eceef3;
-  --ink-soft:#a3abbb;
-  --ink-faint:#737d90;
-  --rule:#2b3140;
-  --grid:rgba(236,238,243,.04);
-  --accent:#7aa0ff;
-  --accent-soft:#1d2740;
-  --margin:#e0605c;
-  --good:#4fc08a;
-  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6);
-  color-scheme:dark;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homework Launchpad - Interactive Dashboard</title>
+    <style>
+        :root {
+            --bg-dark: #0b0b0c;
+            --card-bg: #111113;
+            --accent-blue: #2563eb;
+            --accent-hover: #1d4ed8;
+            --text-main: #f4f4f5;
+            --text-muted: #a1a1aa;
+            --border: #27272a;
+            --success: #10b981;
+        }
 
-*{box-sizing:border-box}
-html,body{margin:0;padding:0}
-body{
-  font-family:var(--font-body);
-  background-color:var(--paper);
-  background-image:
-    linear-gradient(var(--grid) 1px,transparent 1px),
-    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
-  background-size:26px 26px;
-  color:var(--ink);
-  min-height:100vh;
-  -webkit-font-smoothing:antialiased;
-}
-img{max-width:100%}
-[hidden]{display:none!important}
-button,input,select,textarea{font:inherit;color:inherit}
-:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;border-radius:4px}
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            padding: 25px;
+            box-sizing: border-box;
+        }
 
-/* ---------- LOGIN ---------- */
-.gate{
-  min-height:100vh;
-  display:grid;
-  place-items:center;
-  padding:24px;
-}
-.gate-card{
-  width:100%;
-  max-width:400px;
-  background:var(--card);
-  border:1px solid var(--rule);
-  border-left:5px solid var(--margin);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  padding:34px 30px 30px;
-}
-.gate-card h1{
-  font-family:var(--font-display);
-  font-weight:800;
-  font-size:1.65rem;
-  line-height:1.15;
-  margin:0 0 6px;
-  letter-spacing:-.02em;
-  text-wrap:balance;
-}
-.gate-card .sub{
-  color:var(--ink-soft);
-  font-size:.875rem;
-  margin:0 0 26px;
-}
-.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
-.field label{
-  font-size:.7rem;
-  font-weight:600;
-  letter-spacing:.09em;
-  text-transform:uppercase;
-  color:var(--ink-faint);
-}
-.field input{
-  background:var(--paper);
-  border:1px solid var(--rule);
-  border-radius:9px;
-  padding:11px 13px;
-  font-size:.95rem;
-  width:100%;
-}
-.field input:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px var(--accent-soft)}
-.btn{
-  background:var(--accent);
-  color:#fff;
-  border:none;
-  border-radius:9px;
-  padding:12px 18px;
-  font-weight:600;
-  font-size:.95rem;
-  cursor:pointer;
-  width:100%;
-  transition:filter .15s ease;
-}
-.btn:hover{filter:brightness(1.08)}
-.btn:active{filter:brightness(.94)}
-.gate-error{
-  color:var(--margin);
-  font-size:.85rem;
-  min-height:1.2em;
-  margin:12px 0 0;
-  font-weight:500;
-}
-.gate-note{
-  margin:22px 0 0;
-  padding-top:16px;
-  border-top:1px solid var(--rule);
-  font-size:.75rem;
-  color:var(--ink-faint);
-  line-height:1.5;
-}
-.remember{
-  display:flex;align-items:center;gap:8px;
-  font-size:.82rem;color:var(--ink-soft);margin:2px 0 20px;
-}
-.remember input{width:16px;height:16px;accent-color:var(--accent);margin:0}
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
 
-/* ---------- SHELL ---------- */
-.shell{max-width:1120px;margin:0 auto;padding:28px 20px 72px}
-.topbar{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:16px;flex-wrap:wrap;margin-bottom:26px;
-}
-.brand{
-  font-family:var(--font-display);
-  font-weight:800;font-size:1rem;letter-spacing:-.01em;
-  display:flex;align-items:center;gap:9px;
-}
-.brand .dot{width:9px;height:9px;border-radius:50%;background:var(--margin);flex:none}
-.topbar-actions{display:flex;align-items:center;gap:8px}
-.ghost-btn{
-  background:transparent;border:1px solid var(--rule);
-  border-radius:8px;padding:7px 12px;font-size:.8rem;font-weight:500;
-  color:var(--ink-soft);cursor:pointer;transition:border-color .15s,color .15s;
-}
-.ghost-btn:hover{border-color:var(--accent);color:var(--accent)}
+        h1 {
+            font-size: 1.6rem;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
 
-/* ---------- GREETING ---------- */
-.greeting{
-  background:var(--card);
-  border:1px solid var(--rule);
-  border-left:5px solid var(--margin);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  padding:26px 28px;
-  margin-bottom:20px;
-}
-.greeting h2{
-  font-family:var(--font-display);
-  font-weight:800;font-size:clamp(1.4rem,4vw,2rem);
-  margin:0 0 6px;letter-spacing:-.025em;line-height:1.15;text-wrap:balance;
-}
-.greeting .meta{
-  font-family:var(--font-mono);
-  font-size:.75rem;color:var(--ink-faint);
-  letter-spacing:.02em;font-variant-numeric:tabular-nums;
-}
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
 
-/* ---------- SEARCH ---------- */
-.searchbar{
-  display:flex;gap:9px;margin-bottom:24px;flex-wrap:wrap;
-}
-.searchbar input{
-  flex:1 1 240px;min-width:0;
-  background:var(--card);border:1px solid var(--rule);
-  border-radius:10px;padding:13px 15px;font-size:.95rem;
-  box-shadow:var(--shadow);
-}
-.searchbar input:focus{border-color:var(--accent);outline:none}
-.searchbar select{
-  background:var(--card);border:1px solid var(--rule);
-  border-radius:10px;padding:0 12px;font-size:.85rem;
-  color:var(--ink-soft);cursor:pointer;box-shadow:var(--shadow);
-  min-height:46px;
-}
-.searchbar .btn{width:auto;flex:none;padding:12px 22px}
+        .util-btn {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
 
-/* ---------- GRID / SECTIONS ---------- */
-.columns{display:grid;grid-template-columns:1fr;gap:20px}
-@media (min-width:900px){ .columns{grid-template-columns:1.45fr 1fr} }
+        .util-btn:hover {
+            background-color: var(--border);
+        }
 
-.panel{
-  background:var(--card);
-  border:1px solid var(--rule);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  padding:22px;
-}
-.panel + .panel{margin-top:20px}
-.panel-title{
-  font-size:.7rem;font-weight:600;letter-spacing:.11em;
-  text-transform:uppercase;color:var(--ink-faint);
-  margin:0 0 14px;
-}
-.group-label{
-  font-size:.68rem;font-weight:600;letter-spacing:.11em;
-  text-transform:uppercase;color:var(--ink-faint);
-  margin:22px 0 10px;
-}
-.group-label:first-of-type{margin-top:0}
+        .workspace-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
 
-.tiles{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
-  gap:10px;
-}
-.tile{
-  display:flex;align-items:center;gap:11px;
-  padding:13px 13px;
-  border:1px solid var(--rule);
-  border-radius:11px;
-  text-decoration:none;color:var(--ink);
-  background:var(--paper);
-  transition:border-color .15s ease,transform .15s ease,box-shadow .15s ease;
-  min-width:0;
-}
-.tile:hover{
-  border-color:var(--accent);
-  transform:translateY(-2px);
-  box-shadow:0 6px 16px -8px rgba(31,79,216,.4);
-}
-.chip{
-  width:34px;height:34px;flex:none;border-radius:9px;
-  display:grid;place-items:center;
-  font-family:var(--font-display);font-weight:800;font-size:.8rem;
-  color:#fff;letter-spacing:-.02em;
-}
-.tile-name{
-  font-size:.86rem;font-weight:600;line-height:1.25;min-width:0;
-  overflow-wrap:anywhere;
-}
-.tile-sub{font-size:.7rem;color:var(--ink-faint);line-height:1.2;margin-top:2px}
+        @media (max-width: 768px) {
+            .workspace-grid {
+                grid-template-columns: 1fr;
+            }
+        }
 
-/* ---------- WORD OF THE DAY ---------- */
-.wotd-word{
-  font-family:var(--font-display);
-  font-weight:800;font-size:clamp(1.5rem,5vw,2rem);
-  letter-spacing:-.025em;margin:0 0 3px;line-height:1.1;
-  overflow-wrap:anywhere;
-}
-.wotd-pos{
-  font-family:var(--font-mono);font-size:.74rem;
-  color:var(--accent);margin-bottom:11px;letter-spacing:.02em;
-}
-.wotd-def{font-size:.93rem;line-height:1.55;margin:0 0 10px;color:var(--ink)}
-.wotd-ex{
-  font-size:.85rem;line-height:1.5;color:var(--ink-soft);
-  font-style:italic;margin:0;
-  padding-left:11px;border-left:2px solid var(--rule);
-}
-.lookup{display:flex;gap:8px;margin-top:18px;padding-top:16px;border-top:1px solid var(--rule)}
-.lookup input{
-  flex:1;min-width:0;background:var(--paper);
-  border:1px solid var(--rule);border-radius:9px;
-  padding:9px 12px;font-size:.87rem;
-}
-.lookup input:focus{border-color:var(--accent);outline:none}
-.lookup button{
-  flex:none;background:var(--accent-soft);color:var(--accent);
-  border:none;border-radius:9px;padding:9px 15px;
-  font-size:.85rem;font-weight:600;cursor:pointer;
-}
-.lookup button:hover{filter:brightness(.96)}
-.lookup-result{
-  margin-top:14px;font-size:.88rem;line-height:1.55;
-  color:var(--ink-soft);
-}
-.lookup-result strong{color:var(--ink)}
-.lookup-result .lr-pos{
-  font-family:var(--font-mono);font-size:.72rem;color:var(--accent);
-  display:block;margin-bottom:4px;
-}
+        .panel {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+        }
 
-/* ---------- TODO ---------- */
-.todo-add{display:flex;gap:8px;margin-bottom:14px}
-.todo-add input{
-  flex:1;min-width:0;background:var(--paper);
-  border:1px solid var(--rule);border-radius:9px;
-  padding:10px 12px;font-size:.88rem;
-}
-.todo-add input:focus{border-color:var(--accent);outline:none}
-.todo-add button{
-  flex:none;background:var(--accent);color:#fff;border:none;
-  border-radius:9px;width:42px;font-size:1.15rem;cursor:pointer;line-height:1;
-}
-.todo-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
-.todo-item{
-  display:flex;align-items:flex-start;gap:10px;
-  padding:9px 6px;border-bottom:1px solid var(--rule);
-}
-.todo-item:last-child{border-bottom:none}
-.todo-item input[type=checkbox]{
-  width:17px;height:17px;margin:2px 0 0;flex:none;
-  accent-color:var(--good);cursor:pointer;
-}
-.todo-text{flex:1;font-size:.89rem;line-height:1.45;min-width:0;overflow-wrap:anywhere}
-.todo-item.done .todo-text{text-decoration:line-through;color:var(--ink-faint)}
-.todo-del{
-  flex:none;background:none;border:none;color:var(--ink-faint);
-  cursor:pointer;font-size:1rem;line-height:1;padding:2px 5px;border-radius:5px;
-}
-.todo-del:hover{color:var(--margin);background:var(--paper)}
-.empty{
-  font-size:.85rem;color:var(--ink-faint);
-  padding:14px 4px;line-height:1.5;
-}
-.todo-count{
-  font-family:var(--font-mono);font-size:.72rem;color:var(--ink-faint);
-  margin-top:12px;padding-top:11px;border-top:1px solid var(--rule);
-  font-variant-numeric:tabular-nums;
-}
+        h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            color: #fff;
+        }
 
-footer{
-  margin-top:34px;font-size:.72rem;color:var(--ink-faint);
-  text-align:center;line-height:1.6;
-}
-@media (prefers-reduced-motion:reduce){
-  *{transition:none!important;animation:none!important}
-}
-</style>
+        .search-container {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .input-field {
+            flex-grow: 1;
+            background-color: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: #fff;
+            padding: 10px;
+            font-size: 0.9rem;
+            box-sizing: border-box;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        .action-btn {
+            background-color: var(--accent-blue);
+            color: #fff;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .action-btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .search-engines {
+            display: flex;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            align-items: center;
+        }
+
+        .radio-label {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .word-display {
+            font-size: 1.4rem;
+            color: var(--success);
+            font-weight: 700;
+            margin: 5px 0;
+        }
+
+        .muted-caption {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 10px;
+            margin-bottom: 0;
+            line-height: 1.4;
+        }
+    </style>
 </head>
-<body>
+<body id="appBody">
 
-<!-- ============================================================
-     LOGIN SCREEN
-     ============================================================ -->
-<div class="gate" id="gate">
-  <div class="gate-card">
-    <h1>Homework Launchpad</h1>
-    <p class="sub">Sign in to pick up where you left off.</p>
-    <form id="loginForm" autocomplete="off">
-      <div class="field">
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username" placeholder="User1 or your first name" autocomplete="off" required>
-      </div>
-      <div class="field">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" autocomplete="off" required>
-      </div>
-      <div class="remember">
-        <input type="checkbox" id="rememberMe" checked>
-        <label for="rememberMe" style="text-transform:none;letter-spacing:0;font-size:.82rem;font-weight:400;color:var(--ink-soft)">Keep me signed in for 15 days</label>
-      </div>
-      <button type="submit" class="btn">Sign in</button>
-      <p class="gate-error" id="gateError"></p>
-    </form>
-    <p class="gate-note">This sign-in keeps people out of each other's to-do lists. It is not real security — anyone who opens this file in a text editor can read the passwords. Never put a real school password in here.</p>
-  </div>
-</div>
-
-<!-- ============================================================
-     DASHBOARD
-     ============================================================ -->
-<div class="shell" id="dash" hidden>
-
-  <div class="topbar">
-    <div class="brand"><span class="dot"></span> Homework Launchpad</div>
-    <div class="topbar-actions">
-      <button class="ghost-btn" id="themeBtn" type="button">Dark mode</button>
-      <button class="ghost-btn" id="switchBtn" type="button">Switch user</button>
-    </div>
-  </div>
-
-  <div class="greeting">
-    <h2 id="greetingText">Hello</h2>
-    <div class="meta" id="dateText"></div>
-  </div>
-
-  <form class="searchbar" id="searchForm">
-    <input type="text" id="searchInput" placeholder="Search the web…" autocomplete="off" aria-label="Search the web">
-    <select id="engineSelect" aria-label="Search engine">
-      <option value="https://www.google.com/search?q=">Google</option>
-      <option value="https://www.bing.com/search?q=">Bing</option>
-      <option value="https://duckduckgo.com/?q=">DuckDuckGo</option>
-    </select>
-    <button type="submit" class="btn">Search</button>
-  </form>
-
-  <div class="columns">
-
-    <!-- LEFT: links -->
-    <div>
-      <div class="panel">
-        <p class="panel-title">Everything in one place</p>
-        <div id="tileGroups"></div>
-      </div>
+    <div class="dashboard-header">
+        <div>
+            <h1>Homework Launchpad</h1>
+            <span style="font-size: 0.85rem; color: var(--text-muted);">Hello pupil</span>
+        </div>
+        <div class="header-actions">
+            <button class="util-btn" id="themeToggle">Dark mode</button>
+            <button class="util-btn" onclick="alert('Demo Mode: Session active.')">Switch user</button>
+        </div>
     </div>
 
-    <!-- RIGHT: word of the day + to-do -->
-    <div>
-      <div class="panel">
-        <p class="panel-title">Word of the day</p>
-        <p class="wotd-word" id="wotdWord">—</p>
-        <div class="wotd-pos" id="wotdPos"></div>
-        <p class="wotd-def" id="wotdDef"></p>
-        <p class="wotd-ex" id="wotdEx"></p>
-        <form class="lookup" id="lookupForm">
-          <input type="text" id="lookupInput" placeholder="Look up any word…" autocomplete="off" aria-label="Look up a word">
-          <button type="submit">Define</button>
-        </form>
-        <div class="lookup-result" id="lookupResult"></div>
-      </div>
+    <div class="workspace-grid">
+        <!-- Main Panel Stack -->
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+            
+            <!-- Global Search Module -->
+            <div class="panel">
+                <h3>Everything in one place</h3>
+                <div class="search-container">
+                    <input type="text" class="input-field" placeholder="Search the web or lookup entries...">
+                    <button class="action-btn">Search</button>
+                </div>
+                <div class="search-engines">
+                    <label class="radio-label"><input type="radio" name="engine" checked> Google</label>
+                    <label class="radio-label"><input type="radio" name="engine"> Bing</label>
+                    <label class="radio-label"><input type="radio" name="engine"> DuckDuckGo</label>
+                </div>
+            </div>
 
-      <div class="panel">
-        <p class="panel-title">To-do</p>
-        <form class="todo-add" id="todoForm">
-          <input type="text" id="todoInput" placeholder="What's due?" autocomplete="off" aria-label="Add a to-do item">
-          <button type="submit" aria-label="Add">+</button>
-        </form>
-        <ul class="todo-list" id="todoList"></ul>
-        <div class="todo-count" id="todoCount"></div>
-      </div>
+            <!-- Task Board Module -->
+            <div class="panel">
+                <h3>To-do</h3>
+                <div class="search-container">
+                    <input type="text" id="todoInput" class="input-field" placeholder="Add a new task item...">
+                    <button class="action-btn" id="addTodoBtn">+</button>
+                </div>
+                <div id="todoList">
+                    <div class="todo-item">⏰ Year 7 Science Reading Homework</div>
+                    <div class="todo-item">📝 Math Workbook Exercises Page 14</div>
+                </div>
+                <p class="muted-caption">Saved on this computer only — to-do items don't travel with the file.</p>
+            </div>
+
+        </div>
+
+        <!-- Sidebar Widgets -->
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+            
+            <!-- Vocabulary Engine Widget -->
+            <div class="panel">
+                <h3>Word of the day</h3>
+                <div class="word-display">—</div>
+                <button class="util-btn" style="width: 100%; margin-top: 5px;">Define</button>
+                <p class="muted-caption">Word of the day changes at midnight.</p>
+            </div>
+
+        </div>
     </div>
 
-  </div>
+    <script>
+        // Simple client side dark/light interface toggle simulation
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            const body = document.getElementById('appBody');
+            if (body.style.backgroundColor === 'rgb(244, 244, 245)') {
+                body.style.backgroundColor = '#0b0b0c';
+                body.style.color = '#f4f4f5';
+                document.getElementById('themeToggle').textContent = 'Dark mode';
+            } else {
+                body.style.backgroundColor = '#f4f4f5';
+                body.style.color = '#0b0b0c';
+                document.getElementById('themeToggle').textContent = 'Light mode';
+            }
+        });
 
-  <footer>
-    Saved on this computer only — to-do items don't travel with the file.<br>
-    Word of the day changes at midnight.
-  </footer>
-</div>
-
-<script>
-/* ==================================================================
-   ACCOUNTS — EDIT THIS BLOCK
-   ------------------------------------------------------------------
-   Add, rename or remove people here. Nothing else needs changing.
-     login : what they type in the Username box (also accepts `name`)
-     name  : the name shown in the greeting
-     pass  : the password
-   Keep real school passwords OUT of this file.
-   ================================================================== */
-var ACCOUNTS = [
-  { login:"User1", name:"Shiv",  full:"Shiv Kumar",  pass:"1234321" },
-  { login:"User2", name:"Shlok", full:"Shlok Patel", pass:"1234321" }
-];
-
-var REMEMBER_DAYS = 15;
-
-/* ==================================================================
-   LINKS — EDIT THIS BLOCK to add or remove tiles
-   ================================================================== */
-var GROUPS = [
-  { label:"School systems", items:[
-    { name:"School Home", sub:"HEH portal",  url:"https://hatchend.sharepoint.com/sites/HEH-Home", mark:"HE", color:"#d2403c" },
-    { name:"Arbor",        sub:"Timetable",  url:"https://hatch-end-high-school.uk.arbor.sc/",     mark:"AR", color:"#e08b2f" },
-    { name:"Outlook",      sub:"Email",      url:"https://outlook.office.com",                     mark:"OL", color:"#1f6fd8" },
-    { name:"OneDrive",     sub:"Files",      url:"https://hatchend-my.sharepoint.com/",            mark:"OD", color:"#2a7ab0" },
-    { name:"MS Teams",     sub:"Lessons",    url:"https://teams.microsoft.com",                    mark:"MT", color:"#5b5fc7" }
-  ]},
-  { label:"Homework", items:[
-    { name:"Sparx Maths",  sub:"Maths",      url:"https://app.sparx-learning.com",                 mark:"SM", color:"#2f80ed" },
-    { name:"Sparx Reader", sub:"Reading",    url:"https://app.sparx-learning.com",                 mark:"SR", color:"#4b45c4" },
-    { name:"Educake",      sub:"Quizzes",    url:"https://my.educake.co.uk",                       mark:"EC", color:"#0f9d7a" }
-  ]},
-  { label:"Revision", items:[
-    { name:"Seneca",       sub:"Courses",    url:"https://app.senecalearning.com",                 mark:"SN", color:"#8a4fd3" },
-    { name:"BBC Bitesize", sub:"Guides",     url:"https://www.bbc.co.uk/bitesize",                 mark:"BB", color:"#1d1d1d" }
-  ]}
-];
-
-/* ==================================================================
-   GREETINGS
-   ================================================================== */
-var LINES = [
-  "what are we cooking today?",
-  "what's first on the list?",
-  "ready to make a dent in it?",
-  "pick a tile, any tile.",
-  "let's get something finished.",
-  "the homework isn't going to do itself.",
-  "nice to see you. Let's crack on.",
-  "what's the plan?",
-  "one thing at a time.",
-  "back at it.",
-  "let's clear the decks.",
-  "shall we get started?"
-];
-function timeWord(h){
-  if(h < 5)  return "Still up";
-  if(h < 12) return "Good morning";
-  if(h < 17) return "Good afternoon";
-  if(h < 22) return "Good evening";
-  return "Late one";
-}
-
-/* ==================================================================
-   WORD BANK — one per calendar day. Year 8 and below.
-   ================================================================== */
-var WORDS = [
-{w:"abundant",p:"adjective",d:"existing in large amounts; far more than enough",e:"Blackberries were abundant along the hedge that September."},
-{w:"accurate",p:"adjective",d:"correct in every detail; free from mistakes",e:"Her measurements were accurate to the nearest millimetre."},
-{w:"adamant",p:"adjective",d:"refusing to change your mind, no matter what",e:"He was adamant that he had locked the door."},
-{w:"adequate",p:"adjective",d:"enough for what is needed, though not more",e:"One tent was adequate for the two of them."},
-{w:"adjacent",p:"adjective",d:"next to or near something else",e:"The library is adjacent to the sports hall."},
-{w:"advocate",p:"verb",d:"to publicly support an idea or a course of action",e:"The council advocates cycling to school."},
-{w:"ambiguous",p:"adjective",d:"having more than one possible meaning; unclear",e:"His answer was ambiguous, so nobody knew what he meant."},
-{w:"amiable",p:"adjective",d:"friendly and pleasant to be around",e:"The new neighbour was amiable and quick to help."},
-{w:"ample",p:"adjective",d:"more than enough; plenty",e:"There was ample room in the boot for both bags."},
-{w:"analyse",p:"verb",d:"to examine something carefully to understand how it works",e:"We analysed the results before writing our conclusion."},
-{w:"anticipate",p:"verb",d:"to expect something and prepare for it",e:"She anticipated the question and had an answer ready."},
-{w:"apparent",p:"adjective",d:"clear and easy to see or understand",e:"It was apparent from his face that something was wrong."},
-{w:"approximate",p:"adjective",d:"close to the real figure but not exact",e:"The approximate cost of the trip is forty pounds."},
-{w:"arduous",p:"adjective",d:"needing a great deal of effort; hard going",e:"The last mile of the walk was arduous."},
-{w:"articulate",p:"adjective",d:"able to express ideas clearly in speech or writing",e:"She was the most articulate speaker in the debate."},
-{w:"assemble",p:"verb",d:"to gather together, or to put parts together",e:"The whole year group assembled in the sports hall."},
-{w:"assess",p:"verb",d:"to judge the quality, size or value of something",e:"The coach assessed each player's fitness."},
-{w:"astute",p:"adjective",d:"quick to see what is really going on",e:"An astute reader spots the clue in chapter two."},
-{w:"authentic",p:"adjective",d:"real and genuine, not a copy",e:"The museum holds an authentic Roman coin."},
-{w:"benevolent",p:"adjective",d:"kind and wanting to help others",e:"A benevolent stranger paid for their tickets."},
-{w:"bewildered",p:"adjective",d:"completely confused",e:"He looked bewildered by the sudden change of plan."},
-{w:"brevity",p:"noun",d:"the quality of being short and to the point",e:"The teacher praised the brevity of her summary."},
-{w:"brisk",p:"adjective",d:"quick and energetic",e:"They set off at a brisk pace to beat the rain."},
-{w:"candid",p:"adjective",d:"honest and direct, even when it is awkward",e:"She gave a candid account of what went wrong."},
-{w:"cautious",p:"adjective",d:"careful to avoid danger or mistakes",e:"He was cautious on the icy path."},
-{w:"coherent",p:"adjective",d:"clear, logical and easy to follow",e:"His essay was coherent from start to finish."},
-{w:"commence",p:"verb",d:"to begin",e:"The exam will commence at nine o'clock sharp."},
-{w:"compel",p:"verb",d:"to force someone to do something",e:"Nothing could compel him to change his answer."},
-{w:"competent",p:"adjective",d:"having enough skill to do something well",e:"She is a competent swimmer in deep water."},
-{w:"comprehend",p:"verb",d:"to understand something fully",e:"It took a second reading to comprehend the poem."},
-{w:"conceal",p:"verb",d:"to hide something from view",e:"The hedge concealed the gate completely."},
-{w:"concise",p:"adjective",d:"saying a lot in very few words",e:"Keep your conclusion concise."},
-{w:"condemn",p:"verb",d:"to say strongly that something is wrong",e:"The headteacher condemned the vandalism."},
-{w:"conscientious",p:"adjective",d:"careful and thorough in your work",e:"He is a conscientious student who checks everything twice."},
-{w:"consequence",p:"noun",d:"a result of something that happened before",e:"Missing the bus had the consequence of being late."},
-{w:"considerable",p:"adjective",d:"large in size, amount or importance",e:"The project took a considerable amount of time."},
-{w:"consistent",p:"adjective",d:"behaving or happening in the same way each time",e:"Her marks have been consistent all term."},
-{w:"conspicuous",p:"adjective",d:"easy to notice; standing out",e:"The red coat was conspicuous in the grey crowd."},
-{w:"contemplate",p:"verb",d:"to think about something carefully",e:"He sat and contemplated his next move."},
-{w:"contradict",p:"verb",d:"to say the opposite of what someone else has said",e:"The new evidence contradicts the first report."},
-{w:"conventional",p:"adjective",d:"following the usual way of doing things",e:"She took a conventional approach to the problem."},
-{w:"convey",p:"verb",d:"to communicate an idea or feeling",e:"The music conveys a sense of calm."},
-{w:"credible",p:"adjective",d:"believable; able to be trusted",e:"The witness gave a credible account."},
-{w:"crucial",p:"adjective",d:"extremely important to the outcome",e:"The last question was crucial to his grade."},
-{w:"cumulative",p:"adjective",d:"growing steadily as more is added",e:"The cumulative effect of daily practice was obvious."},
-{w:"daunting",p:"adjective",d:"making you feel nervous about what lies ahead",e:"The reading list looked daunting at first."},
-{w:"deceptive",p:"adjective",d:"making something seem different from how it really is",e:"The calm sea was deceptive."},
-{w:"decisive",p:"adjective",d:"able to make choices quickly and firmly",e:"A decisive captain kept the team focused."},
-{w:"deduce",p:"verb",d:"to work something out from the evidence you have",e:"From the footprints she deduced which way he went."},
-{w:"deficient",p:"adjective",d:"not having enough of something",e:"The soil was deficient in nitrogen."},
-{w:"deliberate",p:"adjective",d:"done on purpose rather than by accident",e:"It was a deliberate choice, not a slip."},
-{w:"demolish",p:"verb",d:"to knock down or destroy completely",e:"They demolished the old sports block last summer."},
-{w:"depict",p:"verb",d:"to show something in a picture or in words",e:"The painting depicts a storm at sea."},
-{w:"deter",p:"verb",d:"to put someone off doing something",e:"The rain did not deter them from playing."},
-{w:"detrimental",p:"adjective",d:"causing harm or damage",e:"Skipping breakfast is detrimental to concentration."},
-{w:"devise",p:"verb",d:"to invent or plan something clever",e:"They devised a system for sharing the equipment."},
-{w:"diligent",p:"adjective",d:"working hard and taking care over details",e:"Diligent revision paid off in the exam."},
-{w:"diminish",p:"verb",d:"to become smaller or less",e:"The noise diminished as the crowd left."},
-{w:"discreet",p:"adjective",d:"careful not to draw attention or share secrets",e:"She was discreet about the surprise party."},
-{w:"dismal",p:"adjective",d:"gloomy and depressing",e:"It was a dismal afternoon of grey drizzle."},
-{w:"distinct",p:"adjective",d:"clearly different or clearly noticeable",e:"There is a distinct smell of rain coming."},
-{w:"diverse",p:"adjective",d:"made up of many different kinds",e:"The school has a diverse range of clubs."},
-{w:"dubious",p:"adjective",d:"doubtful; not to be trusted",e:"His excuse sounded dubious."},
-{w:"durable",p:"adjective",d:"able to last a long time without breaking",e:"These boots are durable enough for winter."},
-{w:"eccentric",p:"adjective",d:"behaving in an unusual but harmless way",e:"Their eccentric neighbour painted his door gold."},
-{w:"elaborate",p:"adjective",d:"having many detailed parts",e:"He built an elaborate model of the castle."},
-{w:"eligible",p:"adjective",d:"allowed to do something because you meet the rules",e:"Year 8 pupils are eligible for the trip."},
-{w:"eloquent",p:"adjective",d:"speaking or writing in a powerful, moving way",e:"Her eloquent speech won the debate."},
-{w:"elusive",p:"adjective",d:"hard to find, catch or pin down",e:"The answer proved elusive all afternoon."},
-{w:"eminent",p:"adjective",d:"famous and respected in a particular field",e:"An eminent scientist opened the new lab."},
-{w:"emphasise",p:"verb",d:"to give special importance to something",e:"He emphasised the need to show working."},
-{w:"endeavour",p:"verb",d:"to try hard to achieve something",e:"We endeavour to reply within two days."},
-{w:"endure",p:"verb",d:"to put up with something difficult for a long time",e:"They endured three hours of rain."},
-{w:"enhance",p:"verb",d:"to improve the quality or value of something",e:"Diagrams enhance a science write-up."},
-{w:"enormous",p:"adjective",d:"extremely large",e:"An enormous oak stood at the gate."},
-{w:"erratic",p:"adjective",d:"changing without any clear pattern; unpredictable",e:"The old clock kept erratic time."},
-{w:"essential",p:"adjective",d:"absolutely necessary",e:"Water is essential for every living thing."},
-{w:"evident",p:"adjective",d:"obvious; plain to see",e:"It was evident that she had practised."},
-{w:"exaggerate",p:"verb",d:"to make something sound bigger or worse than it is",e:"Don't exaggerate — it was a small puddle."},
-{w:"exceed",p:"verb",d:"to go beyond a limit or an expectation",e:"Her score exceeded the class average."},
-{w:"exempt",p:"adjective",d:"free from a rule or duty that applies to others",e:"He was exempt from PE that week."},
-{w:"exhaustive",p:"adjective",d:"complete; leaving nothing out",e:"They made an exhaustive list of materials."},
-{w:"expel",p:"verb",d:"to force someone or something out",e:"The lungs expel air when you breathe out."},
-{w:"explicit",p:"adjective",d:"stated clearly, leaving no room for doubt",e:"The instructions were explicit about timing."},
-{w:"extensive",p:"adjective",d:"covering a large area or amount",e:"The grounds include extensive playing fields."},
-{w:"feasible",p:"adjective",d:"possible to do without too much difficulty",e:"Finishing by Friday is feasible."},
-{w:"formidable",p:"adjective",d:"impressive in a way that makes you wary",e:"They faced a formidable opponent in the final."},
-{w:"fortunate",p:"adjective",d:"lucky",e:"We were fortunate the bus was late too."},
-{w:"frequent",p:"adjective",d:"happening often",e:"There are frequent trains on a weekday."},
-{w:"fundamental",p:"adjective",d:"forming the basis of something; most important",e:"Addition is fundamental to algebra."},
-{w:"futile",p:"adjective",d:"pointless because it cannot possibly work",e:"Arguing with the rain is futile."},
-{w:"generate",p:"verb",d:"to produce or create something",e:"Wind turbines generate electricity."},
-{w:"genuine",p:"adjective",d:"real and sincere, not faked",e:"He showed genuine interest in the subject."},
-{w:"gradual",p:"adjective",d:"happening slowly over time",e:"There was a gradual improvement in his handwriting."},
-{w:"hesitant",p:"adjective",d:"pausing because you are unsure",e:"She was hesitant to answer first."},
-{w:"hostile",p:"adjective",d:"unfriendly or threatening",e:"The crowd turned hostile after the decision."},
-{w:"humble",p:"adjective",d:"not proud or boastful about yourself",e:"He stayed humble after winning."},
-{w:"hypothesis",p:"noun",d:"an idea you test to see whether it is true",e:"Our hypothesis was that salt lowers the freezing point."},
-{w:"immense",p:"adjective",d:"extremely large or great",e:"The task took an immense amount of patience."},
-{w:"imminent",p:"adjective",d:"about to happen very soon",e:"A storm seemed imminent."},
-{w:"impartial",p:"adjective",d:"not favouring one side over another",e:"A referee must stay impartial."},
-{w:"implement",p:"verb",d:"to put a plan into action",e:"The school implemented a new timetable."},
-{w:"implication",p:"noun",d:"something suggested without being said directly",e:"The implication was that we should hurry."},
-{w:"inadequate",p:"adjective",d:"not good enough or not enough",e:"One torch was inadequate for the whole group."},
-{w:"inevitable",p:"adjective",d:"certain to happen; impossible to avoid",e:"With that forecast, a cancellation was inevitable."},
-{w:"influence",p:"noun",d:"the power to affect how things turn out",e:"Her sister's influence got her into chess."},
-{w:"initiate",p:"verb",d:"to start something off",e:"He initiated the clean-up after the match."},
-{w:"innovative",p:"adjective",d:"new and original in a useful way",e:"Their innovative design won the competition."},
-{w:"insight",p:"noun",d:"a clear and deep understanding of something",e:"The diary gives insight into life in 1940."},
-{w:"intricate",p:"adjective",d:"having many small, complicated parts",e:"The pattern on the tile is intricate."},
-{w:"intrigue",p:"verb",d:"to make someone very curious",e:"The unopened letter intrigued her."},
-{w:"irrelevant",p:"adjective",d:"having nothing to do with the matter in hand",e:"That fact is interesting but irrelevant here."},
-{w:"jeopardy",p:"noun",d:"danger of harm or loss",e:"The late start put the whole trip in jeopardy."},
-{w:"legitimate",p:"adjective",d:"allowed by the rules; reasonable and fair",e:"That is a legitimate reason to be absent."},
-{w:"lenient",p:"adjective",d:"not strict; more forgiving than expected",e:"The marking was lenient this time."},
-{w:"meagre",p:"adjective",d:"much too small in amount",e:"A meagre portion of chips was left."},
-{w:"meticulous",p:"adjective",d:"extremely careful about every small detail",e:"His notes were meticulous."},
-{w:"minute",p:"adjective",d:"extremely small (said MY-newt)",e:"A minute crack ran across the glass."},
-{w:"monotonous",p:"adjective",d:"boring because it never changes",e:"The monotonous hum of the fan made him sleepy."},
-{w:"notable",p:"adjective",d:"worth paying attention to",e:"There was a notable improvement after half term."},
-{w:"obscure",p:"adjective",d:"not well known, or hard to understand",e:"He quoted an obscure poem nobody recognised."},
-{w:"obsolete",p:"adjective",d:"no longer used because something better exists",e:"Video tapes are obsolete now."},
-{w:"obstacle",p:"noun",d:"something in the way that makes progress harder",e:"The fallen tree was the only obstacle."},
-{w:"optimistic",p:"adjective",d:"expecting good things to happen",e:"She stayed optimistic despite the score."},
-{w:"peculiar",p:"adjective",d:"strange or unusual",e:"There was a peculiar smell in the lab."},
-{w:"perceive",p:"verb",d:"to notice or understand something",e:"He perceived a change in her tone."},
-{w:"persistent",p:"adjective",d:"continuing firmly despite difficulty",e:"Persistent practice fixed his serve."},
-{w:"plausible",p:"adjective",d:"sounding reasonable and likely to be true",e:"That is a plausible explanation."},
-{w:"precede",p:"verb",d:"to come before something else",e:"A short film preceded the talk."},
-{w:"precise",p:"adjective",d:"exact and accurate",e:"Give the precise time you finished."},
-{w:"predominant",p:"adjective",d:"the most common or most noticeable",e:"Green is the predominant colour in the painting."},
-{w:"prevalent",p:"adjective",d:"common in a particular place or time",e:"Colds are prevalent in January."},
-{w:"profound",p:"adjective",d:"very deep or very great in effect",e:"The book had a profound effect on him."},
-{w:"prolific",p:"adjective",d:"producing a great deal of something",e:"She is a prolific writer of short stories."},
-{w:"prominent",p:"adjective",d:"important, or easily seen",e:"The spire is a prominent landmark."},
-{w:"prudent",p:"adjective",d:"sensible and careful about the future",e:"It was prudent to take a spare pen."},
-{w:"reluctant",p:"adjective",d:"unwilling, and showing it",e:"He was reluctant to leave the warm hall."},
-{w:"remote",p:"adjective",d:"far away from other places or people",e:"They camped in a remote valley."},
-{w:"resilient",p:"adjective",d:"able to recover quickly from difficulty",e:"A resilient team came back in the second half."},
-{w:"rigorous",p:"adjective",d:"thorough, careful and demanding",e:"The testing was rigorous."},
-{w:"scarce",p:"adjective",d:"hard to find because there is very little",e:"Seats were scarce by the time we arrived."},
-{w:"scrutinise",p:"verb",d:"to examine something very closely",e:"She scrutinised the map before setting off."},
-{w:"significant",p:"adjective",d:"large or important enough to matter",e:"There was a significant rise in attendance."},
-{w:"simultaneous",p:"adjective",d:"happening at exactly the same time",e:"The two alarms were simultaneous."},
-{w:"sparse",p:"adjective",d:"thinly spread; not dense",e:"Grass was sparse on the dry bank."},
-{w:"spontaneous",p:"adjective",d:"done suddenly, without planning",e:"A spontaneous round of applause broke out."},
-{w:"subsequent",p:"adjective",d:"coming after something else",e:"Subsequent lessons built on the first."},
-{w:"substantial",p:"adjective",d:"large in amount or importance",e:"They made substantial progress before lunch."},
-{w:"subtle",p:"adjective",d:"slight and not obvious, but noticeable",e:"There was a subtle difference between the two shades."},
-{w:"sufficient",p:"adjective",d:"as much as is needed",e:"Two coats of paint were sufficient."},
-{w:"superficial",p:"adjective",d:"only on the surface; not deep or thorough",e:"The damage was superficial."},
-{w:"tedious",p:"adjective",d:"boring and seemingly endless",e:"Copying the table out was tedious."},
-{w:"tentative",p:"adjective",d:"not certain or final; done cautiously",e:"They made a tentative plan for Saturday."},
-{w:"thorough",p:"adjective",d:"complete, with nothing missed",e:"Give the sketch a thorough check."},
-{w:"transparent",p:"adjective",d:"clear enough to see through; or open and honest",e:"The lid is transparent so you can see inside."},
-{w:"trivial",p:"adjective",d:"of very little importance",e:"Don't lose marks over a trivial error."},
-{w:"unanimous",p:"adjective",d:"agreed by absolutely everyone",e:"The vote was unanimous."},
-{w:"unique",p:"adjective",d:"the only one of its kind",e:"Every fingerprint is unique."},
-{w:"vague",p:"adjective",d:"not clear or exact",e:"He gave a vague answer about the time."},
-{w:"versatile",p:"adjective",d:"able to be used in many different ways",e:"A versatile player can cover several positions."},
-{w:"viable",p:"adjective",d:"workable; capable of succeeding",e:"That is the only viable route in winter."},
-{w:"vigilant",p:"adjective",d:"watching carefully for trouble",e:"Stay vigilant near the road."},
-{w:"vivid",p:"adjective",d:"very bright, or very clear in the mind",e:"She wrote a vivid description of the market."},
-{w:"vulnerable",p:"adjective",d:"easily harmed or hurt",e:"Young seedlings are vulnerable to frost."},
-{w:"wary",p:"adjective",d:"cautious because you suspect a problem",e:"He was wary of the loose step."},
-{w:"zealous",p:"adjective",d:"full of energetic enthusiasm for something",e:"A zealous supporter never misses a game."}
-];
-
-/* ==================================================================
-   STORAGE HELPERS — all wrapped, so a blocked localStorage
-   never breaks the page.
-   ================================================================== */
-function store(key,val){
-  try{ localStorage.setItem(key,JSON.stringify(val)); }catch(e){}
-}
-function recall(key,fallback){
-  try{
-    var raw = localStorage.getItem(key);
-    return raw === null ? fallback : JSON.parse(raw);
-  }catch(e){ return fallback; }
-}
-function forget(key){
-  try{ localStorage.removeItem(key); }catch(e){}
-}
-
-var SESSION_KEY = "hl.session";
-var THEME_KEY   = "hl.theme";
-function todoKey(login){ return "hl.todo." + login; }
-
-/* ==================================================================
-   AUTH
-   ================================================================== */
-var currentUser = null;
-
-function findAccount(typed){
-  var t = String(typed||"").trim().toLowerCase();
-  for(var i=0;i<ACCOUNTS.length;i++){
-    var a = ACCOUNTS[i];
-    if(t === a.login.toLowerCase() || t === a.name.toLowerCase()) return a;
-  }
-  return null;
-}
-
-function restoreSession(){
-  var s = recall(SESSION_KEY,null);
-  if(!s || !s.login || !s.expires) return null;
-  if(Date.now() > s.expires){ forget(SESSION_KEY); return null; }
-  for(var i=0;i<ACCOUNTS.length;i++){
-    if(ACCOUNTS[i].login === s.login) return ACCOUNTS[i];
-  }
-  return null;
-}
-
-document.getElementById("loginForm").addEventListener("submit",function(e){
-  e.preventDefault();
-  var err = document.getElementById("gateError");
-  var acc = findAccount(document.getElementById("username").value);
-  var pwd = document.getElementById("password").value;
-
-  if(!acc || pwd !== acc.pass){
-    err.textContent = "That username and password don't match. Try again.";
-    document.getElementById("password").value = "";
-    return;
-  }
-  err.textContent = "";
-  if(document.getElementById("rememberMe").checked){
-    store(SESSION_KEY,{ login:acc.login, expires: Date.now() + REMEMBER_DAYS*86400000 });
-  }
-  openDashboard(acc);
-});
-
-document.getElementById("switchBtn").addEventListener("click",function(){
-  forget(SESSION_KEY);
-  currentUser = null;
-  document.getElementById("dash").hidden = true;
-  document.getElementById("gate").hidden = false;
-  document.getElementById("username").value = "";
-  document.getElementById("password").value = "";
-  document.getElementById("gateError").textContent = "";
-  document.getElementById("username").focus();
-});
-
-/* ==================================================================
-   DASHBOARD
-   ================================================================== */
-function openDashboard(acc){
-  currentUser = acc;
-  document.getElementById("gate").hidden = true;
-  document.getElementById("dash").hidden = false;
-  paintGreeting();
-  paintWord();
-  renderTodos();
-  document.getElementById("searchInput").focus();
-}
-
-function paintGreeting(){
-  var now  = new Date();
-  var line = LINES[Math.floor(Math.random()*LINES.length)];
-  document.getElementById("greetingText").textContent =
-    timeWord(now.getHours()) + " " + currentUser.name + ", " + line;
-  document.getElementById("dateText").textContent =
-    now.toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
-}
-
-/* ---------- tiles ---------- */
-(function buildTiles(){
-  var host = document.getElementById("tileGroups");
-  var html = "";
-  for(var g=0; g<GROUPS.length; g++){
-    html += '<p class="group-label">' + GROUPS[g].label + '</p><div class="tiles">';
-    for(var i=0; i<GROUPS[g].items.length; i++){
-      var it = GROUPS[g].items[i];
-      html +=
-        '<a class="tile" href="' + it.url + '" target="_blank" rel="noopener noreferrer">' +
-          '<span class="chip" style="background:' + it.color + '">' + it.mark + '</span>' +
-          '<span style="min-width:0">' +
-            '<span class="tile-name">' + it.name + '</span>' +
-            '<span class="tile-sub" style="display:block">' + it.sub + '</span>' +
-          '</span>' +
-        '</a>';
-    }
-    html += '</div>';
-  }
-  host.innerHTML = html;
-})();
-
-/* ---------- web search ---------- */
-document.getElementById("searchForm").addEventListener("submit",function(e){
-  e.preventDefault();
-  var q = document.getElementById("searchInput").value.trim();
-  if(!q) return;
-  var base = document.getElementById("engineSelect").value;
-  window.open(base + encodeURIComponent(q), "_blank", "noopener");
-  document.getElementById("searchInput").value = "";
-});
-
-/* ---------- word of the day ---------- */
-function dayIndex(){
-  var now = new Date();
-  var days = Math.floor(Date.UTC(now.getFullYear(),now.getMonth(),now.getDate()) / 86400000);
-  return ((days % WORDS.length) + WORDS.length) % WORDS.length;
-}
-function paintWord(){
-  var e = WORDS[dayIndex()];
-  document.getElementById("wotdWord").textContent = e.w;
-  document.getElementById("wotdPos").textContent  = e.p;
-  document.getElementById("wotdDef").textContent  = e.d;
-  document.getElementById("wotdEx").textContent   = e.e;
-}
-
-/* ---------- live dictionary lookup ---------- */
-document.getElementById("lookupForm").addEventListener("submit",function(e){
-  e.preventDefault();
-  var word = document.getElementById("lookupInput").value.trim();
-  var out  = document.getElementById("lookupResult");
-  if(!word) return;
-  out.textContent = "Looking up " + word + "…";
-
-  fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + encodeURIComponent(word))
-    .then(function(r){
-      if(!r.ok) throw new Error("notfound");
-      return r.json();
-    })
-    .then(function(data){
-      var entry = data[0];
-      var m = entry.meanings[0];
-      var d = m.definitions[0];
-      out.innerHTML = "";
-      var strong = document.createElement("strong");
-      strong.textContent = entry.word;
-      var pos = document.createElement("span");
-      pos.className = "lr-pos";
-      pos.textContent = m.partOfSpeech;
-      var def = document.createElement("span");
-      def.textContent = " — " + d.definition;
-      out.appendChild(strong);
-      out.appendChild(def);
-      out.insertBefore(pos, strong);
-      if(d.example){
-        var ex = document.createElement("div");
-        ex.style.marginTop = "6px";
-        ex.style.fontStyle = "italic";
-        ex.textContent = d.example;
-        out.appendChild(ex);
-      }
-    })
-    .catch(function(){
-      out.textContent = "No definition found for “" + word + "”. Check the spelling, or you may be offline.";
-    });
-});
-
-/* ---------- to-do ---------- */
-function getTodos(){ return recall(todoKey(currentUser.login), []); }
-function setTodos(list){ store(todoKey(currentUser.login), list); }
-
-function renderTodos(){
-  var list  = getTodos();
-  var host  = document.getElementById("todoList");
-  var count = document.getElementById("todoCount");
-  host.innerHTML = "";
-
-  if(!list.length){
-    var p = document.createElement("li");
-    p.className = "empty";
-    p.textContent = "Nothing on the list. Add what's due and tick it off as you go.";
-    host.appendChild(p);
-    count.textContent = "";
-    return;
-  }
-
-  list.forEach(function(item,idx){
-    var li = document.createElement("li");
-    li.className = "todo-item" + (item.done ? " done" : "");
-
-    var cb = document.createElement("input");
-    cb.type = "checkbox";
-    cb.checked = !!item.done;
-    cb.id = "todo-" + idx;
-    cb.addEventListener("change",function(){
-      var l = getTodos(); l[idx].done = cb.checked; setTodos(l); renderTodos();
-    });
-
-    var label = document.createElement("label");
-    label.className = "todo-text";
-    label.setAttribute("for","todo-" + idx);
-    label.textContent = item.text;
-
-    var del = document.createElement("button");
-    del.className = "todo-del";
-    del.type = "button";
-    del.setAttribute("aria-label","Remove " + item.text);
-    del.textContent = "×";
-    del.addEventListener("click",function(){
-      var l = getTodos(); l.splice(idx,1); setTodos(l); renderTodos();
-    });
-
-    li.appendChild(cb); li.appendChild(label); li.appendChild(del);
-    host.appendChild(li);
-  });
-
-  var left = list.filter(function(i){ return !i.done; }).length;
-  count.textContent = left === 0
-    ? "All done — " + list.length + " cleared"
-    : left + " left of " + list.length;
-}
-
-document.getElementById("todoForm").addEventListener("submit",function(e){
-  e.preventDefault();
-  var input = document.getElementById("todoInput");
-  var text  = input.value.trim();
-  if(!text) return;
-  var list = getTodos();
-  list.push({ text:text, done:false });
-  setTodos(list);
-  input.value = "";
-  renderTodos();
-});
-
-/* ---------- theme ---------- */
-function applyTheme(mode){
-  if(mode === "dark" || mode === "light"){
-    document.documentElement.setAttribute("data-theme",mode);
-  }else{
-    document.documentElement.removeAttribute("data-theme");
-  }
-  var dark = mode === "dark" ||
-    (mode !== "light" && window.matchMedia("(prefers-color-scheme: dark)").matches);
-  document.getElementById("themeBtn").textContent = dark ? "Light mode" : "Dark mode";
-}
-document.getElementById("themeBtn").addEventListener("click",function(){
-  var now = document.documentElement.getAttribute("data-theme");
-  var dark = now === "dark" ||
-    (!now && window.matchMedia("(prefers-color-scheme: dark)").matches);
-  var next = dark ? "light" : "dark";
-  store(THEME_KEY,next);
-  applyTheme(next);
-});
-applyTheme(recall(THEME_KEY,null));
-
-/* ---------- boot ---------- */
-(function boot(){
-  var acc = restoreSession();
-  if(acc){ openDashboard(acc); }
-  else{ document.getElementById("username").focus(); }
-})();
-</script>
+        // Simple runtime to-do appending simulation
+        document.getElementById('addTodoBtn').addEventListener('click', () => {
+            const input = document.getElementById('todoInput');
+            if (input.value.trim() !== '') {
+                const list = document.getElementById('todoList');
+                const item = document.createElement('div');
+                item.className = 'todo-item';
+                item.textContent = input.value;
+                list.appendChild(item);
+                input.value = '';
+            }
+        });
+    </script>
 </body>
 </html>
