@@ -64,9 +64,6 @@
         .legal-banner h4 {
             margin: 0 0 5px 0;
             color: var(--warning-text);
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
 
         .legal-banner ul {
@@ -114,8 +111,6 @@
             border-radius: 6px;
             font-weight: 600;
             font-size: 0.95rem;
-            cursor: pointer;
-            border: none;
             transition: background-color 0.2s;
         }
 
@@ -169,7 +164,7 @@
 
         .window-status {
             font-size: 0.8rem;
-            color: #f59e0b;
+            color: #10b981;
             font-weight: 600;
         }
 
@@ -199,11 +194,11 @@
         </div>
         <div class="legal-banner">
             <h4>⚠️ PRIVATE & PROPRIETARY PROPERTY</h4>
-            <p style="margin: 0; color: var(--text-muted);">Viewing this repository constitutes structural agreement to strict copyright guidelines:</p>
+            <p style="margin: 0; color: var(--text-muted);">Viewing this repository constitutes agreement to strict operational terms:</p>
             <ul>
-                <li><strong>NO COPYING:</strong> Prohibited from duplicating any software parameters.</li>
-                <li><strong>NO HOSTING:</strong> Unauthorized deployment tracking mirrors will be rejected.</li>
-                <li><strong>NO PLAGIARISM:</strong> Derivatives may not be displayed as independent logic.</li>
+                <li><strong>NO COPYING:</strong> You are strictly prohibited from copying or using any part of this code.</li>
+                <li><strong>NO HOSTING:</strong> You may not host your own copy or live fork of this project.</li>
+                <li><strong>NO PLAGIARISM:</strong> You may not present this work or derivatives as your own.</li>
             </ul>
         </div>
     </header>
@@ -212,14 +207,14 @@
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Homework Launchpad</h3>
-                <button id="authDemoBtn" class="btn" style="background-color: #10b981;">⚡ Mount Demo Sandbox</button>
+                <a href="https://github.io" class="btn" target="_blank">Open Fullscreen ↗</a>
             </div>
             <p style="color: var(--text-muted); margin: 0;">
-                Click the action module button above to automatically run safe script-injection and mount a demonstration sandbox profile into the simulation matrix below.
+                A comprehensive dashboard ecosystem designed to centralize revision sites, schedules, and helpful modules into an interactive layout workspace. Explore the structural interface preview below.
             </p>
         </div>
 
-        <h2>Live Workspace Sandbox</h2>
+        <h2>Live Interactive Preview</h2>
         <div class="preview-window">
             <div class="window-header">
                 <div class="window-controls">
@@ -228,33 +223,16 @@
                     <div class="control-dot dot-maximize"></div>
                 </div>
                 <div class="window-address">silocell.github.io/HEH-Homework/</div>
-                <div class="window-status" id="statusTerm">● OFFLINE_STANDBY</div>
+                <div class="window-status">● LIVE_VIEW</div>
             </div>
-            <!-- Points directly to your subdirectory application path -->
-            <iframe id="appFrame" class="frame-viewport" src="https://github.io" title="Homework Launchpad Sandbox View"></iframe>
+            <iframe class="frame-viewport" src="https://github.io" title="Homework Launchpad Interface View"></iframe>
         </div>
     </main>
 
     <footer>
         <p>Copyright &copy; 2026 Shiv (silocell). All Rights Reserved.</p>
-        <p>Permitted for educational inspection only. Unauthorized distribution triggers an immediate DMCA copyright notice process.</p>
+        <p>Permitted for educational inspection only. Unauthorized distribution will result in an immediate DMCA takedown notice.</p>
     </footer>
 
-    <script>
-        document.getElementById('authDemoBtn').addEventListener('click', () => {
-            const frame = document.getElementById('appFrame');
-            const status = document.getElementById('statusTerm');
-            
-            status.textContent = '● DATA_STREAM_INJECTED';
-            status.style.color = '#10b981';
-            
-            // Fires credentials securely across frame layers on the same sub-origin
-            frame.contentWindow.postMessage({
-                cmd: 'TRIGGER_SANDBOX_LOGIN',
-                user: 'demo_reviewer',
-                pass: '1234567890987654321'
-            }, 'https://github.io');
-        });
-    </script>
 </body>
 </html>
