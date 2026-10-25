@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shiv | silocell</title>
+    <style>
+        :root {
+            --bg-color: #121214;
+            --card-bg: #1a1a1e;
+            --text-main: #e4e4e7;
+            --text-muted: #a1a1aa;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --border: #27272a;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+
+        header {
+            margin-bottom: 40px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin: 0 0 10px 0;
+            color: #fff;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: #fff;
+            margin-top: 30px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .project-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .project-title {
+            font-size: 1.8rem;
+            margin: 0;
+            color: #fff;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--accent);
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .badge-grid {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .badge {
+            background-color: var(--border);
+            color: var(--text-main);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        strong {
+            color: #fff;
+        }
+
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Shiv</h1>
+        <p class="subtitle">Developer & Year 7 Student</p>
+    </header>
+
+    <main>
+        <h2>Featured Project</h2>
+        
+        <div class="project-card">
+            <div class="project-header">
+                <h3 class="project-title">Homework Launchpad</h3>
+                <a href="https://silocell.github.io/HEH-Homework/" class="btn" target="_blank">Launch Site →</a>
+            </div>
+            
+            <p>A central homework dashboard built for Year 7 pupils to keep track of evening assignments, revision tools, and peer communication in one place—eliminating the need for six open tabs and a physical planner left in a locker.</p>
+            
+            <h4>Core Features</h4>
+            <ul>
+                <li><strong>Private To-Do List:</strong> Completely private to each individual user.</li>
+                <li><strong>Year Chat & Private Rooms:</strong> Moderated communication spaces for students.</li>
+                <li><strong>Noticeboard:</strong> Shared homework questions and school updates.</li>
+                <li><strong>AI Explainer:</strong> Powered explanation tool built to clarify tough topics (capped at 10 requests daily).</li>
+                <li><strong>Look-Up Tools:</strong> Native English and Simple English Wikipedia integrations.</li>
+            </ul>
+
+            <h4>Security Implementation</h4>
+            <ul>
+                <li><strong>Row Level Security (RLS):</strong> Granular rules enforced at the database layer.</li>
+                <li><strong>Server-Side Verification:</strong> State and permissions managed dynamically via backend functions.</li>
+                <li><strong>Column-Level Protection:</strong> Restricts sensitive database columns from client-side retrieval.</li>
+                <li><strong>Race-Condition Triggers:</strong> Atomic token spending to prevent multi-request bypasses.</li>
+            </ul>
+
+            <div class="badge-grid">
+                <span class="badge">HTML5</span>
+                <span class="badge">CSS3</span>
+                <span class="badge">JavaScript (ES6)</span>
+                <span class="badge">Supabase</span>
+                <span class="badge">Groq AI</span>
+                <span class="badge">Cloudflare</span>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Copyright &copy; 2026 Shiv (silocell). All Rights Reserved.</p>
+        <p>Code provided on this profile is for educational inspection only. Unauthorized replication or distribution is strictly prohibited.</p>
+    </footer>
+
+</body>
+</html>
