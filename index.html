@@ -1,240 +1,218 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shiv | silocell</title>
-    <style>
-        :root {
-            --bg-color: #0b0b0c;
-            --card-bg: #111113;
-            --text-main: #f4f4f5;
-            --text-muted: #a1a1aa;
-            --accent: #2563eb;
-            --accent-hover: #1d4ed8;
-            --border: #27272a;
-            --warning-bg: rgba(239, 68, 68, 0.07);
-            --warning-border: rgba(239, 68, 68, 0.3);
-            --warning-text: #f87171;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shiv — silocell</title>
+<meta name="description" content="Things I've built: a homework site for my year group, and the games inside it.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2212%22 fill=%22%23eef1f6%22/%3E%3Cpath d=%22M18 8v48%22 stroke=%22%23c8342b%22 stroke-width=%223%22/%3E%3Cpath d=%22M26 22h22M26 32h22M26 42h14%22 stroke=%22%231b2b43%22 stroke-width=%223%22 stroke-linecap=%22round%22/%3E%3C/svg%3E">
+<style>
+  /* ------------------------------------------------------------------
+     An exercise book: squared paper, the red margin rule down the left,
+     and ink. The work on this page was made for school, so the page is
+     made of school.
+     ------------------------------------------------------------------ */
+  :root{
+    --paper:#eef1f6;
+    --square:#d2dced;        /* the faint grid printed on the paper */
+    --ink:#16202e;
+    --ink-soft:#54627a;
+    --margin-rule:#c8342b;   /* the red line you are not meant to write past */
+    --accent:#2f3bb3;        /* biro blue */
+    --card:#ffffff;
+    --edge:#cfd8e6;
+    --shadow:rgba(22,32,46,.09);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#101624; --square:#1a2235; --ink:#e6ebf5; --ink-soft:#97a3bb;
+      --margin-rule:#e05b52; --accent:#8d97ff; --card:#161d2e; --edge:#273047;
+      --shadow:rgba(0,0,0,.45);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#101624; --square:#1a2235; --ink:#e6ebf5; --ink-soft:#97a3bb;
+    --margin-rule:#e05b52; --accent:#8d97ff; --card:#161d2e; --edge:#273047;
+    --shadow:rgba(0,0,0,.45);
+  }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            line-height: 1.6;
-        }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background-color:var(--paper);
+    background-image:
+      linear-gradient(var(--square) 1px, transparent 1px),
+      linear-gradient(90deg, var(--square) 1px, transparent 1px);
+    background-size:28px 28px;
+    color:var(--ink);
+    font:1.0625rem/1.65 Georgia,"Iowan Old Style","Times New Roman",serif;
+  }
 
-        header {
-            margin-bottom: 40px;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
+  /* The page sits inside the book's margin, with the red rule beside it. */
+  .sheet{
+    max-width:46rem;
+    margin:0 auto;
+    padding:clamp(2rem,6vw,4.5rem) clamp(1rem,5vw,2.5rem) 5rem clamp(2.25rem,7vw,4rem);
+    position:relative;
+  }
+  .sheet::before{
+    content:"";
+    position:absolute; top:0; bottom:0;
+    left:clamp(1.1rem,3.5vw,2rem);
+    width:2px; background:var(--margin-rule); opacity:.8;
+  }
 
-        .header-title h1 {
-            font-size: 2.5rem;
-            margin: 0 0 5px 0;
-            letter-spacing: -0.03em;
-        }
+  h1,h2,h3,.ui{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  }
+  h1{
+    font-size:clamp(2.4rem,8vw,3.6rem);
+    line-height:1.02; letter-spacing:-.035em; font-weight:800;
+    margin:0 0 .5rem;
+  }
+  .standfirst{
+    font-size:clamp(1.05rem,2.6vw,1.25rem);
+    color:var(--ink-soft); margin:0 0 .35rem; max-width:34rem;
+  }
+  h2{
+    font-size:1.35rem; letter-spacing:-.015em; font-weight:700;
+    margin:3.5rem 0 .25rem;
+  }
+  h2 + .note{ margin-top:0 }
+  h3{ font-size:1.02rem; font-weight:700; margin:0 0 .2rem; letter-spacing:-.01em }
+  p{ margin:0 0 1rem; max-width:34rem }
+  .note{ color:var(--ink-soft); font-size:.95rem }
+  a{ color:var(--accent) }
+  a:focus-visible,button:focus-visible{ outline:3px solid var(--margin-rule); outline-offset:3px; border-radius:3px }
 
-        .subtitle {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-            margin: 0;
-        }
+  /* ---- the hero: an actual game, running ---- */
+  .play{ margin:2rem 0 0 }
+  .play-frame{
+    border:1px solid var(--edge); border-radius:14px; overflow:hidden;
+    background:#0b1020; box-shadow:0 18px 40px -22px var(--shadow);
+    aspect-ratio:16/10;
+  }
+  .play-frame iframe{ display:block; width:100%; height:100%; border:0 }
+  .play-cap{
+    display:flex; flex-wrap:wrap; gap:.5rem 1rem; align-items:baseline;
+    margin-top:.7rem; font-size:.92rem; color:var(--ink-soft);
+  }
+  .play-cap strong{ color:var(--ink); font-weight:700 }
 
-        .legal-banner {
-            background-color: var(--warning-bg);
-            border: 1px solid var(--warning-border);
-            border-radius: 8px;
-            padding: 15px;
-            font-size: 0.85rem;
-            max-width: 460px;
-            color: var(--text-main);
-        }
+  /* ---- work list: ruled rows, not a grid of identical cards ---- */
+  .work{ list-style:none; margin:1.25rem 0 0; padding:0 }
+  .work li{ padding:1.1rem 0; border-top:1px solid var(--edge) }
+  .work li:last-child{ border-bottom:1px solid var(--edge) }
+  .work .row{ display:flex; flex-wrap:wrap; gap:.4rem .9rem; align-items:baseline }
+  .work p{ margin:.35rem 0 0; font-size:.97rem; color:var(--ink-soft) }
+  .links{ margin-top:.5rem; font-size:.92rem; display:flex; flex-wrap:wrap; gap:.9rem }
+  .tag{
+    font:600 .7rem/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    letter-spacing:.02em; padding:.05rem .5rem; border-radius:999px;
+    border:1px solid var(--edge); color:var(--ink-soft); white-space:nowrap;
+  }
+  .tag.open{ border-color:var(--accent); color:var(--accent) }
 
-        .legal-banner h4 {
-            margin: 0 0 5px 0;
-            color: var(--warning-text);
-        }
+  /* ---- terms, stated once, calmly ---- */
+  .terms{
+    margin-top:1.25rem; padding:1.15rem 1.25rem;
+    background:var(--card); border:1px solid var(--edge);
+    border-left:3px solid var(--margin-rule); border-radius:0 10px 10px 0;
+    font-size:.95rem;
+  }
+  .terms p:last-child{ margin-bottom:0 }
 
-        .legal-banner ul {
-            margin: 5px 0 0 0;
-            padding-left: 15px;
-            color: var(--text-muted);
-        }
-
-        h2 {
-            font-size: 1.5rem;
-            margin-top: 40px;
-            margin-bottom: 15px;
-        }
-
-        .card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 30px;
-            margin-bottom: 30px;
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .card-title {
-            font-size: 1.8rem;
-            margin: 0;
-            font-weight: 700;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            background-color: var(--accent);
-            color: #fff;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: background-color 0.2s;
-        }
-
-        .btn:hover {
-            background-color: var(--accent-hover);
-        }
-
-        .preview-window {
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            overflow: hidden;
-            background: #000;
-            margin-top: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-        }
-
-        .window-header {
-            background-color: var(--card-bg);
-            padding: 12px 20px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .window-controls {
-            display: flex;
-            gap: 8px;
-        }
-
-        .control-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-        .dot-close { background-color: #ef4444; }
-        .dot-minimize { background-color: #f59e0b; }
-        .dot-maximize { background-color: #10b981; }
-
-        .window-address {
-            background-color: var(--bg-color);
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            padding: 4px 40px;
-            border-radius: 6px;
-            min-width: 300px;
-            text-align: center;
-            font-family: monospace;
-        }
-
-        .window-status {
-            font-size: 0.8rem;
-            color: #10b981;
-            font-weight: 600;
-        }
-
-        .frame-viewport {
-            width: 100%;
-            height: 650px;
-            border: none;
-            background-color: #ffffff;
-        }
-
-        footer {
-            margin-top: 80px;
-            padding-top: 30px;
-            border-top: 1px solid var(--border);
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            text-align: center;
-        }
-    </style>
+  footer{
+    margin-top:4rem; padding-top:1.25rem; border-top:1px solid var(--edge);
+    font-size:.88rem; color:var(--ink-soft);
+  }
+  @media (max-width:560px){
+    .play-frame{ aspect-ratio:4/5 }
+  }
+</style>
 </head>
 <body>
+<div class="sheet">
 
-    <header>
-        <div class="header-title">
-            <h1>Shiv</h1>
-            <p class="subtitle">Developer & Year 7 Student</p>
+  <header>
+    <h1>Shiv</h1>
+    <p class="standfirst">I'm in Year 7. I built a homework site for my year group, and the games that live inside it.</p>
+  </header>
+
+  <!-- The hero is the thing itself. No screenshots, no mockups. -->
+  <section class="play" aria-labelledby="play-h">
+    <h2 id="play-h" style="margin-top:2rem">Have a go</h2>
+    <p class="note">This is Gate Run, one of the games on the site. Three gates come at you with an answer on each — steer into the right one before you arrive. Arrow keys, or tilt your phone. Nothing to sign in to.</p>
+    <div class="play-frame">
+      <iframe src="/HEH-Launchpad-Game/" title="Gate Run — a maths and English driving game" loading="lazy" allow="autoplay; fullscreen"></iframe>
+    </div>
+    <p class="play-cap"><strong>Gate Run</strong> <span>Built with Three.js. The questions are generated in the page, so it works with no connection.</span></p>
+  </section>
+
+  <section aria-labelledby="work-h">
+    <h2 id="work-h">What I've built</h2>
+    <p class="note">Four repositories. The site is mine to run; the games are yours to take.</p>
+
+    <ul class="work">
+      <li>
+        <div class="row"><h3>Homework Launchpad</h3><span class="tag">All rights reserved</span></div>
+        <p>The homework site my year group uses: to-do lists, a noticeboard, year chat, a topic explainer, and every game in one place. Accounts and data sit in Supabase; the parts that hold keys run on a server, not in the page.</p>
+        <div class="links">
+          <a href="/HEH-Homework/">Open the site</a>
+          <a href="https://github.com/silocell/HEH-Homework">Read the code</a>
         </div>
-        <div class="legal-banner">
-            <h4>⚠️ PRIVATE & PROPRIETARY PROPERTY</h4>
-            <p style="margin: 0; color: var(--text-muted);">Viewing this repository constitutes agreement to strict operational terms:</p>
-            <ul>
-                <li><strong>NO COPYING:</strong> You are strictly prohibited from copying or using any part of this code.</li>
-                <li><strong>NO HOSTING:</strong> You may not host your own copy or live fork of this project.</li>
-                <li><strong>NO PLAGIARISM:</strong> You may not present this work or derivatives as your own.</li>
-            </ul>
+      </li>
+      <li>
+        <div class="row"><h3>Gate Run</h3><span class="tag open">GPL v3</span></div>
+        <p>A 3D driving game for maths and English. Every wrong answer on a gate is a mistake people actually make, so you can't rule the others out on sight.</p>
+        <div class="links">
+          <a href="/HEH-Launchpad-Game/">Play</a>
+          <a href="https://github.com/silocell/HEH-Launchpad-Game">Code</a>
         </div>
-    </header>
-
-    <main>
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Homework Launchpad</h3>
-                <a href="https://github.io" class="btn" target="_blank">Open Full Production Engine ↗</a>
-            </div>
-            <p style="color: var(--text-muted); margin: 0;">
-                Explore the sandboxed historical user interface mockup built locally below. Use the button module above to review the live cloud-connected operational network platform.
-            </p>
+      </li>
+      <li>
+        <div class="row"><h3>Scratch games</h3><span class="tag open">GPL v3</span></div>
+        <p>Six games I made in Scratch — a racer, a maze, Fruit Slash, a small RPG, two-player Pong, Ducks Rampage — packaged so they run in a browser with no Scratch account and nothing installed.</p>
+        <div class="links">
+          <a href="/HEH-Launchpad-Scratch/">Play</a>
+          <a href="https://github.com/silocell/HEH-Launchpad-Scratch">Code</a>
         </div>
-
-        <h2>Live Workspace Sandbox</h2>
-        <div class="preview-window">
-            <div class="window-header">
-                <div class="window-controls">
-                    <div class="control-dot dot-close"></div>
-                    <div class="control-dot dot-minimize"></div>
-                    <div class="control-dot dot-maximize"></div>
-                </div>
-                <!-- Simulates your address layout cleanly -->
-                <div class="window-address">silocell.github.io/demo.html</div>
-                <div class="window-status">● LOCAL_SANDBOX</div>
-            </div>
-            <!-- POINTS SECURELY TO YOUR LOCAL FILE PASSTHROUGH -->
-            <iframe class="frame-viewport" src="demo.html" title="Homework Launchpad Interface View"></iframe>
+      </li>
+      <li>
+        <div class="row"><h3>Learning games</h3><span class="tag open">GPL v3</span></div>
+        <p>Level Up, Times Table Tycoon, Word Dragons and Battle Stories. These keep your level and points, so they need a Launchpad account.</p>
+        <div class="links">
+          <a href="/HEH-Launchpad-Learn/">Open</a>
+          <a href="https://github.com/silocell/HEH-Launchpad-Learn">Code</a>
         </div>
-    </main>
+      </li>
+      <li>
+        <div class="row"><h3>OpenMCL</h3><span class="tag">In progress</span></div>
+        <p>A Minecraft launcher, taking the good parts of the ones that already exist and leaving out the rest.</p>
+        <div class="links"><a href="https://github.com/silocell/OpenMCL-Launcher">Code</a></div>
+      </li>
+    </ul>
+  </section>
 
-    <footer>
-        <p>Copyright &copy; 2026 Shiv (silocell). All Rights Reserved.</p>
-        <p>Permitted for educational inspection only. Unauthorized distribution will result in an immediate DMCA takedown notice.</p>
-    </footer>
+  <section aria-labelledby="how-h">
+    <h2 id="how-h">How it's made</h2>
+    <p>Plain HTML, CSS and JavaScript — no framework. Supabase for accounts, data and server functions. GitHub Pages for hosting. The server side isn't in any of these repositories: not because hiding code makes anything safe, but because those files hold keys, and keys belong somewhere private.</p>
+    <p>There's a second copy of the whole site, the lab, where things get tried before they reach anyone's homework.</p>
+  </section>
 
+  <section aria-labelledby="use-h">
+    <h2 id="use-h">Using this code</h2>
+    <div class="terms">
+      <p><strong>The games are open.</strong> Gate Run, the Scratch games and the learning games are released under the GNU GPL v3. Copy them, change them, put them on your own site — as long as what you share stays open too.</p>
+      <p><strong>Homework Launchpad isn't.</strong> It's all rights reserved. You're welcome to read the code and learn from it; please don't host your own copy of it or hand it in as your own work. If you'd like to use part of it for something, ask me — the answer is very likely yes.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 Shiv (silocell). Built with a lot of help from Claude, which argued with me about several of these decisions and was right about some of them.</p>
+  </footer>
+
+</div>
 </body>
 </html>
